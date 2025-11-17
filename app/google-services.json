@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "382837240462",
+    "firebase_url": "https://cargofit-ec30e-default-rtdb.firebaseio.com",
+    "project_id": "cargofit-ec30e",
+    "storage_bucket": "cargofit-ec30e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382837240462:android:cde62803a862ebfd58cfdf",
+        "android_client_info": {
+          "package_name": "com.example.cargofit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1gqv3TPTvnOVVfZVUrDWSDHWRliqroy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
