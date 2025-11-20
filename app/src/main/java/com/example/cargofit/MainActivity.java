@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
 
-        // 🔹 زر تسجيل الدخول
+// 🔹 زر تسجيل الدخول
         btnLogin.setOnClickListener(view -> {
             String emailText = email.getText().toString().trim();
             String passText = password.getText().toString().trim();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Light"
     android:gravity="top"
@@ -12,7 +13,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="13dp"
         app:cardElevation="4dp"
         android:layout_marginBottom="70dp"
         android:backgroundTint="#FF775F"
@@ -36,7 +37,7 @@
                 android:layout_marginBottom="10dp"/>
 
             <TextView
-                android:text="Upload your Excel file to find your CargoFit!"
+                android:text="Upload your CSV file to find your CargoFit!"
                 android:textSize="17sp"
                 android:textColor="#FFFFFF"
                 android:layout_gravity="start"
@@ -44,7 +45,6 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
     <!-- Upload Box -->
     <LinearLayout
@@ -61,25 +61,39 @@
         android:elevation="4dp">
 
         <ImageView
+            android:id="@+id/uploadIcon"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_upload"
-           />
+            android:src="@drawable/ic_upload" />
 
         <TextView
+            android:id="@+id/uploadText"
             android:layout_marginTop="16dp"
-            android:text="Upload Excel File"
+            android:text="Upload CSV File"
             android:textSize="20sp"
             android:textColor="#2A2A2A"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <!-- Selected File Name -->
+    <TextView
+        android:id="@+id/tvFileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No file selected"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="20dp" />
+
     <!-- Read Button -->
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCalculate"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Read the File"
+        android:text="calculate CargoFit"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:layout_marginHorizontal="20dp"
@@ -87,6 +101,13 @@
         app:cornerRadius="15dp"
         android:backgroundTint="#FF775F"/>
 
-
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
 
 </LinearLayout>
