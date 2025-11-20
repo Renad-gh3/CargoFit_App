@@ -44,8 +44,7 @@ public class SigninActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         Toast.makeText(SigninActivity.this,"Login successful!",Toast.LENGTH_SHORT).show();
                         // هنا يمكنك التوجيه للصفحة الرئيسية مثلاً:
-                        // startActivity(new Intent(SigninActivity.this, HomeActivity.class));
-                        // finish();
+                        startActivity(new Intent(SigninActivity.this, UploadExcelActivity.class));
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(SigninActivity.this,"Login Error: "+e.getMessage(),Toast.LENGTH_LONG).show();

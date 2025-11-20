@@ -79,6 +79,9 @@ public class SignupActivity extends AppCompatActivity {
                     db.child(userId).setValue(userData)
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(SignupActivity.this,"Account created successfully!",Toast.LENGTH_SHORT).show();
+                                // الانتقال إلى صفحة UploadExcelActivity
+                                Intent intent = new Intent(SignupActivity.this, UploadExcelActivity.class);
+                                startActivity(intent);
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(SignupActivity.this,"Database Error: "+e.getMessage(),Toast.LENGTH_SHORT).show();
