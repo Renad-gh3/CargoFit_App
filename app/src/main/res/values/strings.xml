@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CargoFit</string>
+    <string name="home">Home</string>
+    <string name="route_optimization">Route Optimization</string>
+    <string name="truck_allocation_results">Truck Allocation Results</string>
+    <string name="shipment_summary">Shipment Summary</string>
+    <string name="optimal_loading_results">Optimal Loading Results</string>
 </resources>

@@ -62,6 +62,7 @@ dependencies {
     implementation("org.apache.poi:poi:5.2.3")
     implementation("org.apache.poi:poi-ooxml-lite:5.2.3")
 
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
