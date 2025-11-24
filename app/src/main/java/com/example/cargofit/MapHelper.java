@@ -53,16 +53,15 @@ public class MapHelper {
         map.addMarker(new MarkerOptions().position(from).title("Origin"));
         map.addMarker(new MarkerOptions().position(to).title("Destination"));
 
-        map.addPolyline(new PolylineOptions()
-                .add(from, to)
-                .width(10)
-                .color(Color.BLUE));
+        map.addPolyline(new PolylineOptions().add(from, to).width(10).color(Color.BLUE));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(from);
         builder.include(to);
 
         map.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 150));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(from, 5));
+
     }
 
     @SuppressLint("StaticFieldLeak")
