@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class UploadExcelActivity extends AppCompatActivity {
 
@@ -37,13 +38,14 @@ public class UploadExcelActivity extends AppCompatActivity {
     private Uri selectedFileUri;
     private DatabaseReference databaseReference;
     private List<CargoItem> cargoList;
+    private String currentOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_excel);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("cargoData");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         initViews();
         setupClickListeners();
@@ -357,18 +359,66 @@ public class UploadExcelActivity extends AppCompatActivity {
     }
 
     private void uploadToFirebase() {
-        if (cargoList != null && !cargoList.isEmpty()) {
+        if (cargoList == null || cargoList.isEmpty()) return;
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(userId)
+                .child("orders");
+
+        // احسب orderId مرة وحدة فقط
+        ordersRef.get().addOnSuccessListener(snapshot -> {
+            long orderCount = snapshot.getChildrenCount() + 1;
+            currentOrderId = "order_" + orderCount;
+
+            DatabaseReference cargoRef = ordersRef
+                    .child(currentOrderId)
+                    .child("cargoData");
+
             for (CargoItem cargo : cargoList) {
-                String key = databaseReference.push().getKey();
+                String key = cargoRef.push().getKey();
                 if (key != null) {
-                    databaseReference.child(key).setValue(cargo)
-                            .addOnFailureListener(e ->
-                                    Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    cargo.id = key;
+                    cargoRef.child(key).setValue(cargo);
                 }
             }
-            Toast.makeText(this, "Data uploaded to Firebase successfully!", Toast.LENGTH_LONG).show();
-        }
+
+            Toast.makeText(this, "Data uploaded successfully!", Toast.LENGTH_LONG).show();
+
+            // مرري نفس orderId مباشرة للخوارزمية
+            fetchTrucksAndAssignProducts();
+        });
     }
+
+
+
+    private void fetchTrucksAndAssignProducts() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference trucksRef = FirebaseDatabase.getInstance().getReference("trucks");
+
+        trucksRef.get().addOnSuccessListener(trucksSnapshot -> {
+            List<Truck> trucks = new ArrayList<>();
+            for (var child : trucksSnapshot.getChildren()) {
+                Truck truck = child.getValue(Truck.class);
+                if (truck != null) trucks.add(truck);
+            }
+
+            // استخدمي نفس orderId المحسوب سابقًا
+            DPAssigner.assignAndSave(
+                    UploadExcelActivity.this,
+                    cargoList,
+                    trucks,
+                    userId,
+                    currentOrderId
+            );
+        });
+    }
+
+
+
 
     private boolean isNumeric(String str) {
         try {

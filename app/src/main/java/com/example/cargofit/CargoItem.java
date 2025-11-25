@@ -1,6 +1,7 @@
 package com.example.cargofit;
 
 public class CargoItem {
+    public String id;
     private String productName;
     private int quantity;
     private double weight;
@@ -17,6 +18,7 @@ public class CargoItem {
     public CargoItem(String productName, int quantity, double weight,
                      double length, double width, double height,
                      String type, String origin, String destination) {
+        this.id = null;
         this.productName = productName;
         this.quantity = quantity;
         this.weight = weight;
