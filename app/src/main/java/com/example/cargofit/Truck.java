@@ -1,21 +1,30 @@
 package com.example.cargofit;
 
 public class Truck {
-    public String truckId;
-    public String truckName;
-    public int height;
-    public int length;
-    public int width;
-    public double maxWeight;
+    String truckId;
+    String truckName;
+    double length;
+    double width;
+    double height;
+    double maxWeight;
+
 
     public Truck() {}
 
-    public Truck(String truckId, String truckName, int height, int length, int width, double maxWeight) {
+    public Truck(String truckId, String truckName, double length, double width, double height, double maxWeight) {
         this.truckId = truckId;
         this.truckName = truckName;
-        this.height = height;
         this.length = length;
         this.width = width;
+        this.height = height;
         this.maxWeight = maxWeight;
     }
+
+    public String getTruckId() { return truckId; }
+    public String getTruckName() { return truckName; }
+    public double getLength() { return length; }
+    public double getWidth() { return width; }
+    public double getHeight() { return height; }
+    public double getMaxWeight() { return maxWeight; }
+
 }

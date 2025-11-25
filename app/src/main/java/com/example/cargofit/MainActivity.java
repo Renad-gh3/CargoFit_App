@@ -11,6 +11,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*
+        //If wanted to edit truck database
+        TruckData td = new TruckData();
+        td.onCreate(savedInstanceState);
+        */
     }
 
     public void GoToPage(View view) {

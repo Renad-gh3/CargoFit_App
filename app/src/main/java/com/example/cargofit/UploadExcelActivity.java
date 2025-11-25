@@ -49,6 +49,7 @@ public class UploadExcelActivity extends AppCompatActivity {
 
         initViews();
         setupClickListeners();
+        setContentView(R.layout.activity_results);
     }
 
     private void initViews() {
