@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResultsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -65,7 +70,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
         loadCargoDataFromFirebase();
-
+        loadAssignedTrucks();
     }
 
     // ----------------------------------------------------------
@@ -73,8 +78,20 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     // ----------------------------------------------------------
     private void loadCargoDataFromFirebase() {
 
+        String userId = getIntent().getStringExtra("userId");
+        String orderId = getIntent().getStringExtra("orderId");
+
+        if (userId == null || orderId == null) {
+            Toast.makeText(this, "Missing orderId or userId!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("cargoData");
+                .getReference("users")
+                .child(userId)
+                .child("orders")
+                .child(orderId)
+                .child("cargoData");
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -93,6 +110,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
                     calculateSummary();
                     updateMapAndDistance();
+                } else {
+                    Toast.makeText(ResultsActivity.this, "No cargo items found!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -102,6 +121,145 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
             }
         });
     }
+
+    private void loadAssignedTrucks() {
+
+        String userId = getIntent().getStringExtra("userId");
+        String orderId = getIntent().getStringExtra("orderId");
+
+        if (userId == null || orderId == null) {
+            Toast.makeText(this, "Missing userId/orderId!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(userId)
+                .child("orders")
+                .child(orderId)
+                .child("assignedTrucks");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot ds) {
+
+                LinearLayout container = findViewById(R.id.truck_results_container);
+                container.removeAllViews();
+
+                if (!ds.exists()) {
+                    addTextToContainer(container, "No truck assignments found.");
+                    return;
+                }
+
+                List<AssignedTruck> oneTruckList = new ArrayList<>();
+
+                for (DataSnapshot truckSnap : ds.getChildren()) {
+                    AssignedTruck truck = truckSnap.getValue(AssignedTruck.class);
+                    if (truck == null) continue;
+
+                    // ⬅ Title
+                    addTextToContainer(container,
+                            truck.truckName +
+                                    "\nTotal Weight: " + truck.totalWeight +
+                                    " kg\nTotal Volume: " + truck.totalVolume + " Mm³");
+
+                    // Items
+                    if (truck.items != null) {
+                        for (UnitItem item : truck.items) {
+                            addTextToContainer(container,
+                                    " • " + item.productName +
+                                            " (W: " + item.weight +
+                                            " KG, V: " + (item.realVolume/1000) + ")");
+                        }
+                    }
+                    oneTruckList.add(truck);
+                }
+                displayTruckAssignments(oneTruckList);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ResultsActivity.this,
+                        "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addTextToContainer(LinearLayout container, String text) {
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextSize(15);
+        tv.setTextColor(0xFF000000);
+        tv.setPadding(0, 6, 0, 6);
+        container.addView(tv);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void displayTruckAssignments(List<AssignedTruck> assignedList) {
+
+        LinearLayout container = findViewById(R.id.truck_results_container);
+        container.removeAllViews();
+
+        for (AssignedTruck truck : assignedList) {
+
+            View card = getLayoutInflater().inflate(R.layout.item_cargo, container, false);
+
+            TextView tvName = card.findViewById(R.id.tv_truck_name);
+            TextView tvWeight = card.findViewById(R.id.tv_total_weight);
+            TextView tvVolume = card.findViewById(R.id.tv_total_volume);
+            LinearLayout itemsContainer = card.findViewById(R.id.items_container);
+
+            tvName.setText( truck.truckName);
+            tvWeight.setText("Total Weight: " + truck.totalWeight + " kg");
+            tvVolume.setText("Total Volume: " + truck.totalVolume + " cm³");
+
+            // Group items
+            Map<String, GroupedItem> grouped = groupUnits(truck.items);
+
+            for (GroupedItem g : grouped.values()) {
+                TextView t = new TextView(this);
+                t.setText("• " + g.name +
+                        " — Qty: " + g.quantity +
+                        " (W: " + g.weight + " KG, V: " + g.volume + " cm³)");
+                t.setTextSize(14f);
+                t.setTextColor(Color.DKGRAY);
+
+                itemsContainer.addView(t);
+            }
+
+            container.addView(card);
+        }
+    }
+
+    private static class GroupedItem {
+        String name;
+        double weight;
+        double volume;
+        int quantity;
+
+        GroupedItem(String name, double weight, double volume) {
+            this.name = name;
+            this.weight = weight;
+            this.volume = volume;
+            this.quantity = 1;
+        }
+    }
+
+    private Map<String, GroupedItem> groupUnits(List<UnitItem> units) {
+        Map<String, GroupedItem> map = new HashMap<>();
+
+        for (UnitItem u : units) {
+            if (!map.containsKey(u.productName)) {
+                map.put(u.productName, new GroupedItem(u.productName, u.weight, u.realVolume));
+            } else {
+                map.get(u.productName).quantity++;
+            }
+        }
+        return map;
+    }
+
+
 
     // ----------------------------------------------------------
     // CALCULATE SUMMARY

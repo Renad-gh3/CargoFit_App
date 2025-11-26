@@ -3,35 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/white"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/light_blue">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Row: Truck Icon + Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/img_truck_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/truck"
+                android:contentDescription="Truck Icon"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_truck_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Truck Name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_color"/>
+        </LinearLayout>
+
+        <!-- Truck stats -->
+        <TextView
+            android:id="@+id/tv_total_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Weight:"
+            android:textColor="#333"/>
 
         <TextView
-            android:id="@+id/tv_product_name"
-            android:text="Product"
-            android:textStyle="bold"
+            android:id="@+id/tv_total_volume"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Total Volume:"
+            android:textColor="#333"/>
 
-        <TextView
-            android:id="@+id/tv_quantity"
-            android:text="Qty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_weight"
-            android:text="Weight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <!-- Items List (Grouped) -->
+        <LinearLayout
+            android:id="@+id/items_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 

@@ -53,7 +53,7 @@ public class MapHelper {
         map.addMarker(new MarkerOptions().position(from).title("Origin"));
         map.addMarker(new MarkerOptions().position(to).title("Destination"));
 
-        map.addPolyline(new PolylineOptions().add(from, to).width(10).color(Color.BLUE));
+        map.addPolyline(new PolylineOptions().add(from, to).width(10).color(context.getResources().getColor(R.color.dark_blue)));
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(from);

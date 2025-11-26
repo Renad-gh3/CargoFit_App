@@ -14,11 +14,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textDirection="ltr"
+        android:paddingTop="15dp"
         app:contentInsetStartWithNavigation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -27,6 +29,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textDirection="ltr"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"/>
 
@@ -78,21 +81,25 @@
                         android:text="@string/shipment_summary"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        android:textDirection="ltr"
                         android:textColor="#333333"/>
                     <TextView
                         android:id="@+id/tv_summary_total_items"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:textDirection="ltr"
                         android:textColor="#333333"/>
                     <TextView
                         android:id="@+id/tv_summary_total_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textDirection="ltr"
                         android:textColor="#333333"/>
                     <TextView
                         android:id="@+id/tv_summary_total_volume"
                         android:layout_width="wrap_content"
+                        android:textDirection="ltr"
                         android:layout_height="wrap_content"
                         android:textColor="#333333"/>
                 </LinearLayout>
@@ -144,18 +151,21 @@
                         android:text="@string/route_optimization"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        android:textDirection="ltr"
                         android:textColor="#333333"/>
 
                     <TextView
                         android:id="@+id/tv_route_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textDirection="ltr"
                         android:layout_marginTop="8dp"
                         android:textColor="#333333"/>
 
                     <TextView
                         android:id="@+id/tv_route_cost"
                         android:layout_width="wrap_content"
+                        android:textDirection="ltr"
                         android:layout_height="wrap_content"
                         android:textColor="#333333"/>
 

@@ -49,7 +49,7 @@ public class UploadExcelActivity extends AppCompatActivity {
 
         initViews();
         setupClickListeners();
-        setContentView(R.layout.activity_results);
+
     }
 
     private void initViews() {
@@ -415,6 +415,12 @@ public class UploadExcelActivity extends AppCompatActivity {
                     userId,
                     currentOrderId
             );
+            // Go to results
+            Intent i = new Intent(UploadExcelActivity.this, ResultsActivity.class);
+            i.putExtra("userId", userId);
+            i.putExtra("orderId", currentOrderId);
+            startActivity(i);
+            finish();
         });
     }
 

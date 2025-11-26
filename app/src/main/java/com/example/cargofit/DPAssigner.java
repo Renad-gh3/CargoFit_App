@@ -1,6 +1,7 @@
 package com.example.cargofit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -351,6 +352,7 @@ public class DPAssigner {
 
     private static void saveAssignedListToFirebase(Context ctx, List<AssignedTruck> results, String userId,
                                                    String orderId) {
+
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference("users")
                 .child(userId)
@@ -358,13 +360,24 @@ public class DPAssigner {
                 .child(orderId)
                 .child("assignedTrucks");
 
-
         for (AssignedTruck at : results) {
             ref.child(at.truckId).setValue(at);
         }
 
         runOnUiThreadToast(ctx, "Assignments saved successfully");
+
+        new android.os.Handler(ctx.getMainLooper()).post(() -> {
+            android.content.Intent intent =
+                    new android.content.Intent(ctx, ResultsActivity.class);
+
+            intent.putExtra("orderId", orderId);
+            intent.putExtra("userId", userId);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent);
+        });
     }
+
 
     private static void runOnUiThreadToast(Context ctx, String message) {
         if (ctx == null) return;
